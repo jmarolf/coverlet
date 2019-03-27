@@ -81,7 +81,11 @@ namespace Coverlet.Console
                 var dOutput = output.HasValue() ? output.Value() : Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar.ToString();
                 var dThreshold = threshold.HasValue() ? double.Parse(threshold.Value()) : 0;
                 var dThresholdTypes = thresholdTypes.HasValue() ? thresholdTypes.Values : new List<string>(new string[] { "line", "branch", "method" });
+#if NETCOREAPP
                 var dThresholdStat = thresholdStat.HasValue() ? Enum.Parse<ThresholdStatistic>(thresholdStat.Value(), true) : Enum.Parse<ThresholdStatistic>("minimum", true);
+#else
+                var dThresholdStat = thresholdStat.HasValue() ? (ThresholdStatistic)Enum.Parse(typeof(ThresholdStatistic), thresholdStat.Value(), true) : (ThresholdStatistic)Enum.Parse(typeof(ThresholdStatistic), "minimum", true);
+#endif
 
                 logger.LogInformation("\nCalculating coverage result...");
 
